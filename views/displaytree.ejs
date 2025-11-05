@@ -36,7 +36,7 @@ Modified by Grégoire ALIZADEH NOIRET, 15 March 2023
     <div id="tree-container" style="border:2px solid lightgrey; float: left; overflow-y: auto; width: 40%;">
       <svg id="svg1"></svg>
     </div>
-    <div id="alignment-container" style="border:2px solid lightgrey; overflow-x: auto; overflow-y: auto;">
+    <div id="alignment-container" style="border:2px solid green; overflow-x: auto; overflow-y: auto;">
       <svg id="svg2"></svg>
     </div>
   </main>
@@ -492,7 +492,11 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   var decalageY = -150 ;
   svg1.attr("width", widthSVG + margin.right + margin.left);
   svg1.attr("height", heightSVG + margin.top + margin.down+300      + ajustementY);
-  g.attr("transform", "translate(" + (margin.right - minX - 250) + "," + (margin.top - minY + 50 + psGraphHeight + decalageY) + ")");
+  var shift_histo = 0;
+  if (flag_histogram == -1) {
+      shift_histo = 200;
+  } 
+  g.attr("transform", "translate(" + (margin.right - minX - 250) + "," + (margin.top - minY + 50 + psGraphHeight + decalageY - shift_histo) + ")");
   //  D3: Objets LINK
   var link = g.selectAll(".link").data(links);  // associe l'element link a la donnee links
   //EXIT gere les elements qui ont disparu
@@ -808,6 +812,10 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
   if (flag_histogram == -1 )  {
     svg3.attr("height",  0);
     svgbidon.attr("height",  0);
+  }
+  else {
+        svg3.attr("height",  200);
+    svgbidon.attr("height",  200);
   }
   d3.select('#ps-graph-global').remove();
   if (!document.getElementById('ps-graph-global')) {
@@ -1173,11 +1181,15 @@ function updateSvg(treeRoot,firstLoad ,config = {}) {
     .text(function(d) {return d.dna;});
   console.log("sequences  OK");
   if (displaySeqType == 'AA') {
+    var shift_histo = 0;
+    if (flag_histogram == -1) {
+      shift_histo = 200;
+    } 
   var aaDiv = d3.select('#svg2')
       .append('g')
       .attr('id', 'aa-container')
       //.attr("transform", "translate(" + (margin.right - minX - 300) + "," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
-      .attr("transform", "translate( 0," + (margin.top - minY + 50 + psGraphHeight  + decalageY) + ")")
+      .attr("transform", "translate( 0," + (margin.top - minY + 50 + psGraphHeight  + decalageY - shift_histo) + ")")
     var aablock =
       aaDiv.selectAll(".aa_block")
       .data(aa_dataset);
