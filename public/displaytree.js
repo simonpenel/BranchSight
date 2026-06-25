@@ -1553,41 +1553,6 @@ function saveSVGAlignment(){
   // img.src = 'data:image/svg+xml;base64,'+window.btoa(unescape(encodeURIComponent(as_text)));
   // window.open().document.write('<p>Please copy or save the the image (it may not display if it is too large) <img src="' + img.src + '"/>');
 };
-// Fonction recursive qui renvoie les noeuds ancestraux communs a
-// une liste de feuilles
-// ---------------------------------------------------------------
-function recuAncestors (todo, done) {
-  if (todo.length > 1) {
-    var n1 = todo.shift();
-    var n2 = todo.shift();
-    var anc = n1.path(n2);
-    var maxHeight=0;
-    var n3=n1;
-    anc.forEach(function (d ){
-      if (d.height > maxHeight) {
-        maxHeight = d.height;
-        n3=d;
-      }
-    });
-    todo.splice(0, 0,n3);
-    done.push(n1);
-    done.push(n2);
-    anc = n1.path(n3);
-    anc.forEach(function (d ){
-      done.push(d)
-    });
-    anc = n2.path(n3);
-    anc.forEach(function (d ){
-      done.push(d)
-    });
-    return recuAncestors (todo, done)
-  }
-  else {
-    var n1  = todo.shift();
-    done.push(n1);
-    return (done, [])
-  }
-}
 
 // Fonction de calcul de la position  d'un noeud a partir des longueurs
 // de branch_length
@@ -1659,22 +1624,6 @@ function expandTree(treeRoot) {
     }
   });
 }
-// Fonction qui collapse les noeuds d'une certaine profondeur
-// ----------------------------------------------------------
-function expandTree(treeRoot) {
-  treeRoot.each(function (d) {
-    if (d.data.nodeinfo) {
-      if (d.data.nodeinfo.status === "collapsed") {
-        if (d.data._clade) {
-          d.data.clade = d.data._clade;
-          d.data._clade = null;
-          d.data.nodeinfo = {status : "extended"};
-        }
-      }
-    }
-  });
-}
-
 // Actions sur les boutons
 // -----------------------
 $('#selectCrossref').on('click', function(event) {
